@@ -69,7 +69,7 @@ public class TodoTestData {
         return Stream.of(Arguments.of(id, text, completed));
     }
 
-    static Stream<Arguments> checkAddElementWithoutCompletedData() {  //todo
+    static Stream<Arguments> checkAddElementWithoutCompletedData() {
         String id = "509";
         String text = "Completed is not present";
         boolean completed = false;

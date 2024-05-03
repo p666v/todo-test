@@ -1,10 +1,8 @@
 package ru.buttonone.constants;
 
 public final class CommonConstant {
-    public static final int SUCCESSFUL_REQUEST = 200;
-    public static final int SUCCESSFUL_CREATION = 201;
-    public static final int SUCCESSFUL_DELETION = 204;
-    public static final int INCORRECT_INPUT = 400;
-    public static final int ACCESS_DENIED = 401;
-    public static final int NOT_FOUND = 404;
+    public static final String MAXIMUM_ID = "18446744073709551615";
+    public static final String MINIMUM_ID = "0";
+    public static final String NEGATIVE_DATA = "-1";
+    public static final String MORE_MAXIMUM_DATA = "18446744073709551616";
 }

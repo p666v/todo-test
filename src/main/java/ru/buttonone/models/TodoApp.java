@@ -11,7 +11,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonFilter("myFilter")
-public class TodoInstance {
+public class TodoApp {
     private BigInteger id;
     private String text;
     private boolean completed;

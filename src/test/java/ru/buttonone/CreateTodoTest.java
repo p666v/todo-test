@@ -7,19 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.buttonone.models.TodoInstance;
-import ru.buttonone.services.TodoInstanceService;
-import ru.buttonone.services.TodoInstanceServiceImpl;
-import ru.buttonone.specifications.Specification;
+import ru.buttonone.dto.TodoAppDto;
+import ru.buttonone.dto.TodoAppDtoImpl;
 
 import static io.restassured.RestAssured.given;
-import static ru.buttonone.constants.CommonConstant.INCORRECT_INPUT;
-import static ru.buttonone.constants.CommonConstant.SUCCESSFUL_CREATION;
+import static ru.buttonone.constants.CodConstant.INCORRECT_INPUT;
+import static ru.buttonone.constants.CodConstant.SUCCESSFUL_CREATION;
+import static ru.buttonone.specifications.Specification.*;
 
 @Slf4j
-public class TodoTest {
-    private final TodoInstanceService instance = new TodoInstanceServiceImpl();
-    private TodoInstance todoInstance;
+public class CreateTodoTest {
+    private final TodoAppDto todoAppDto = new TodoAppDtoImpl();
 
     /**
      * Тест запускается первым, для формирования сущностей для тестирования
@@ -31,9 +29,9 @@ public class TodoTest {
     public void addElementWithValidData(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Добавления элемент с валидными данными: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
@@ -44,19 +42,19 @@ public class TodoTest {
      * Позитивный сценарий Create
      */
 
-    @DisplayName("Проверка добавления элемента с полными данными")
+    @DisplayName("Проверка добавления элемента")
     @ParameterizedTest
     @MethodSource("ru.buttonone.TodoTestData#checkAddCompletedItemData")
     public void checkAddCompletedItem(String idExpected, String textExpected, boolean completedExpected) {
-        log.info("Проверка добавления элемента с полными данными: {}, {}, {}", idExpected, textExpected, completedExpected);
+        log.info("Проверка добавления элемента: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
-        log.info("Проверка checkAddCompletedItem выполнена");
+        log.info("Проверка добавления элемента выполнена");
     }
 
     @DisplayName("Проверка добавления элемента с ID=0")
@@ -65,13 +63,13 @@ public class TodoTest {
     public void checkAddElementWithIdZero(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента с ID=0: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
-        log.info("Проверка checkAddElementWithIdZero выполнена");
+        log.info("Проверка добавления элемента с ID=0 выполнена");
     }
 
     @DisplayName("Проверка добавления элемента с ID=max")
@@ -80,13 +78,13 @@ public class TodoTest {
     public void checkAddElementWithIdMax(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемент элемента с ID=max: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
-        log.info("Проверка checkAddElementWithIdMax выполнена");
+        log.info("Проверка добавления элемента с ID=max выполнена");
     }
 
     @DisplayName("Проверка добавления элемента без заполненного параметра text")
@@ -95,13 +93,13 @@ public class TodoTest {
     public void checkAddElementWithoutCompletedParameter(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента без заполненного параметра text: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
-        log.info("Проверка checkAddElementWithoutCompletedParameter выполнена");
+        log.info("Проверка добавления элемента без заполненного параметра text выполнена");
     }
 
     /**
@@ -114,13 +112,13 @@ public class TodoTest {
     public void checkAddElementWithDuplicateId(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента с повторяющимися идентификатором: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithDuplicateId выполнена");
+        log.info("Проверка добавления элемента с повторяющимися идентификатором выполнена");
     }
 
     @DisplayName("Проверка добавления элемента с отрицательным идентификатором")
@@ -129,13 +127,13 @@ public class TodoTest {
     public void checkAddElementWithNegativeId(String idExpected, String textExpected, boolean completedExpected) {
         log.info("ППроверка добавления элемента с отрицательным идентификатором: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithNegativeId выполнена");
+        log.info("Проверка добавления элемента с отрицательным идентификатором выполнена");
     }
 
     @DisplayName("Проверка добавления элемента с идентификатором, превышающим максимум")
@@ -144,13 +142,13 @@ public class TodoTest {
     public void checkAddElementWithIdMoreThanMaximum(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента с идентификатором, превышающим максимум: {}, {}, {}", idExpected, textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoInstance(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithIdMoreThanMaximum выполнена");
+        log.info("Проверка добавления элемента с идентификатором, превышающим максимум выполнена");
     }
 
     @DisplayName("Проверка добавления элемента без ID")
@@ -159,13 +157,13 @@ public class TodoTest {
     public void checkAddElementWithoutId(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента без ID: {}, {}", textExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoTextCompleted(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDtoWithoutId(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithoutId выполнена");
+        log.info("Проверка добавления элемента без ID выполнена");
     }
 
     @DisplayName("Проверка добавления элемента без Text")
@@ -174,13 +172,13 @@ public class TodoTest {
     public void checkAddElementWithoutText(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента без Text: {}, {}", idExpected, completedExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoIdCompleted(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDtoWithoutText(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithoutText выполнена");
+        log.info("Проверка добавления элемента без Text выполнена");
     }
 
     @DisplayName("Проверка добавления элемента без Completed")
@@ -189,13 +187,13 @@ public class TodoTest {
     public void checkAddElementWithoutCompleted(String idExpected, String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента без Completed: {}, {}", idExpected, textExpected);
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
-                .body(instance.createTodoIdText(idExpected, textExpected, completedExpected))
+                .body(todoAppDto.todoAppToDtoWithoutCompleted(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithoutCompleted выполнена");
+        log.info("Проверка добавления элемента без Completed выполнена");
     }
 
     @DisplayName("Проверка добавления элемента без body")
@@ -203,13 +201,11 @@ public class TodoTest {
     public void checkAddElementWithoutBody() {
         log.info("Проверка добавления элемента без body");
         given()
-                .spec(Specification.requestSpecWithoutAuthorization())
+                .spec(reqSpecMethodPost())
                 .when()
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
-        log.info("Проверка checkAddElementWithoutBody выполнена");
+        log.info("Проверка добавления элемента без body выполнена");
     }
-
-
 }
