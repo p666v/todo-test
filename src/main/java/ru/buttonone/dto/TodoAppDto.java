@@ -9,4 +9,6 @@ public interface TodoAppDto {
     String todoAppToDtoWithoutText(String idExpected, String textExpected, boolean completedExpected);
 
     String todoAppToDtoWithoutId(String idExpected, String textExpected, boolean completedExpected);
+
+    String todoAppToDtoEmpty();
 }

@@ -5,7 +5,6 @@ import ru.buttonone.services.UploadingTestDataServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
-
         UploadingTestDataService service = new UploadingTestDataServiceImpl();
         service.uploadData();
     }

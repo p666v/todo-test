@@ -19,7 +19,7 @@ public class TodoAppDtoImpl implements TodoAppDto {
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "text", "completed"));
         TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
 
-        return convertingObjectToJason(filters, todoApp);
+        return convertObjectToJason(filters, todoApp);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class TodoAppDtoImpl implements TodoAppDto {
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "text"));
         TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
 
-        return convertingObjectToJason(filters, todoApp);
+        return convertObjectToJason(filters, todoApp);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TodoAppDtoImpl implements TodoAppDto {
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "completed"));
         TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
 
-        return convertingObjectToJason(filters, todoApp);
+        return convertObjectToJason(filters, todoApp);
     }
 
     @Override
@@ -46,10 +46,19 @@ public class TodoAppDtoImpl implements TodoAppDto {
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("text", "completed"));
         TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
 
-        return convertingObjectToJason(filters, todoApp);
+        return convertObjectToJason(filters, todoApp);
     }
 
-    private String convertingObjectToJason(FilterProvider filters, TodoApp todoApp) {
+    @Override
+    public String todoAppToDtoEmpty() {
+        FilterProvider filters = new SimpleFilterProvider()
+                .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept());
+        TodoApp todoApp = new TodoApp();
+
+        return convertObjectToJason(filters, todoApp);
+    }
+
+    private String convertObjectToJason(FilterProvider filters, TodoApp todoApp) {
         String todoInstanceJson;
         try {
             todoInstanceJson = new ObjectMapper().writer(filters).writeValueAsString(todoApp);
@@ -59,4 +68,6 @@ public class TodoAppDtoImpl implements TodoAppDto {
         }
         return todoInstanceJson;
     }
+
+
 }

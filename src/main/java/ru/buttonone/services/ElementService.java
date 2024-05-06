@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface ElementService {
 
-    List<TodoApp> getElements();
+    List<TodoApp> getElementsList();
+
+    TodoApp findElementById(String id);
 }

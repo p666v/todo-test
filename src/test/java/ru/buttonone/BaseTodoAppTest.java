@@ -1,5 +1,7 @@
-package ru.buttonone.services;
+package ru.buttonone;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import ru.buttonone.dto.TodoAppDto;
 import ru.buttonone.dto.TodoAppDtoImpl;
 import ru.buttonone.models.TodoApp;
@@ -12,10 +14,11 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static ru.buttonone.constants.CodConstant.SUCCESSFUL_CREATION;
 
-public class UploadingTestDataServiceImpl implements UploadingTestDataService {
+public class BaseTodoAppTest {
 
-    @Override
-    public void uploadData() {
+    @DisplayName("Добавление сущностей для тестирования API")
+    @BeforeAll
+    public static void uploadData() {
         TodoAppDto instance = new TodoAppDtoImpl();
 
         List<TodoApp> dataList = Arrays.asList(
@@ -23,13 +26,9 @@ public class UploadingTestDataServiceImpl implements UploadingTestDataService {
                 new TodoApp(new BigInteger("2"), "Я объект №2", false),
                 new TodoApp(new BigInteger("3"), "Я объект №3", true),
                 new TodoApp(new BigInteger("4"), "Я объект №4", false),
-                new TodoApp(new BigInteger("5"), "Я объект №5", true),
-                new TodoApp(new BigInteger("6"), "Я объект №6", false),
-                new TodoApp(new BigInteger("7"), "Я объект №7", true),
-                new TodoApp(new BigInteger("8"), "Я объект №8", true),
-                new TodoApp(new BigInteger("9"), "Я объект №9", false),
-                new TodoApp(new BigInteger("10"), "Я объект №10", true),
-                new TodoApp(new BigInteger("11"), "Я объект №11", false));
+                new TodoApp(new BigInteger("6"), "Я объект №6", true),
+                new TodoApp(new BigInteger("7"), "Я объект №7", false),
+                new TodoApp(new BigInteger("8"), "Я объект №8", true));
 
         for (TodoApp data : dataList) {
             String id = String.valueOf(data.getId());

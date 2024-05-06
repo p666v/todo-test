@@ -61,4 +61,15 @@ public class Specification {
                 .addFilter(new AllureRestAssured())
                 .build();
     }
+
+    public static RequestSpecification reqSpecMethodPut(BigInteger id) {
+        return new RequestSpecBuilder()
+                .setBaseUri(BASE_URL)
+                .log(LogDetail.METHOD)
+                .setContentType(ContentType.JSON)
+                .addPathParams("id", id)
+                .addFilter(new AllureRestAssured())
+                .build();
+    }
+
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class TodoTestData {
+public class TodoAppTestData {
 
     static Stream<Arguments> checkAddCompletedItemData() {
         String id = "201";

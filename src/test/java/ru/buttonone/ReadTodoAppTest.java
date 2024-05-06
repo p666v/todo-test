@@ -1,20 +1,18 @@
 package ru.buttonone;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.buttonone.models.TodoApp;
 import ru.buttonone.services.ElementService;
 import ru.buttonone.services.ElementServiceImpl;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static ru.buttonone.constants.ApiConstant.LIMIT;
 import static ru.buttonone.constants.ApiConstant.OFFSET;
 import static ru.buttonone.constants.CodConstant.INCORRECT_INPUT;
@@ -23,7 +21,7 @@ import static ru.buttonone.constants.CommonConstant.*;
 import static ru.buttonone.specifications.Specification.*;
 
 @Slf4j
-public class ReadTodoTest {
+public class ReadTodoAppTest {
     private final ElementService elementService = new ElementServiceImpl();
     private List<TodoApp> todoAppList;
 
@@ -49,13 +47,13 @@ public class ReadTodoTest {
     @Test
     public void checkLimit() {
         log.info("Проверка limit");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithParameter(LIMIT, "1"))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
         assertEquals(1, todoAppList.size(),
                 "Возвращаемый список элементов не соответствует limit, переданному в запросе");
@@ -66,13 +64,13 @@ public class ReadTodoTest {
     @Test
     public void checkLimitWithZero() {
         log.info("Проверка limit = 0");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithParameter(LIMIT, MINIMUM_ID))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
         assertTrue(todoAppList.isEmpty(),
                 "Возвращаемый список элементов не соответствует limit = 0, переданному в запросе");
@@ -83,15 +81,15 @@ public class ReadTodoTest {
     @Test
     public void checkLimitMax() {
         log.info("Проверка limit = max");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithParameter(LIMIT, MAXIMUM_ID))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
-        assertEquals(elementService.getElements().size(), todoAppList.size(),
+        assertEquals(elementService.getElementsList().size(), todoAppList.size(),
                 "Возвращаемый список элементов не соответствует limit = max, переданному в запросе");
         log.info("Проверка limit = max выполнена");
     }
@@ -100,15 +98,15 @@ public class ReadTodoTest {
     @Test
     public void checkOffset() {
         log.info("Проверка offset");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithParameter(OFFSET, "2"))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
-        assertEquals(elementService.getElements().get(2), todoAppList.get(0),
+        assertEquals(elementService.getElementsList().get(2), todoAppList.get(0),
                 "Возвращаемый список элементов не соответствует offset, переданному в запросе");
         log.info("Проверка offset выполнена");
     }
@@ -117,15 +115,15 @@ public class ReadTodoTest {
     @Test
     public void checkOffsetWithZero() {
         log.info("Проверка offset = 0");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithParameter(OFFSET, MINIMUM_ID))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
-        assertEquals(elementService.getElements().size(), todoAppList.size(),
+        assertEquals(elementService.getElementsList().size(), todoAppList.size(),
                 "Возвращаемый список элементов не соответствует offset = 0, переданному в запросе");
         log.info("Проверка offset = 0 выполнена");
     }
@@ -134,13 +132,13 @@ public class ReadTodoTest {
     @Test
     public void checkOffsetMax() {
         log.info("Проверка offset = max");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithParameter(OFFSET, MAXIMUM_ID))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
         assertTrue(todoAppList.isEmpty(),
                 "Возвращаемый список элементов не соответствует offset = max, переданному в запросе");
@@ -151,18 +149,18 @@ public class ReadTodoTest {
     @Test
     public void checkCollaborationOffsetAndLimit() {
         log.info("Проверка совместной работы offset и limit");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithOffsetAndLimit("1", "1"))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
-        Assertions.assertAll(
+        assertAll(
                 () -> assertEquals(1, todoAppList.size(),
                         "Возвращаемый список элементов не соответствует limit, переданному в запросе"),
-                () -> assertEquals(elementService.getElements().get(1), todoAppList.get(0),
+                () -> assertEquals(elementService.getElementsList().get(1), todoAppList.get(0),
                         "Возвращаемый список элементов не соответствует offset, переданному в запросе"));
         log.info("Проверка совместной работы offset и limit выполнена");
     }
@@ -171,13 +169,13 @@ public class ReadTodoTest {
     @Test
     public void checkOffsetAndLimitWithMaximum() {
         log.info("Проверка совместной работы offset и limit с максимальными значениями");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithOffsetAndLimit(MAXIMUM_ID, MAXIMUM_ID))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
         assertTrue(todoAppList.isEmpty(),
                 "Возвращаемый список элементов не соответствует offset и limit с максимальными значениями, переданными в запросе");
@@ -188,13 +186,13 @@ public class ReadTodoTest {
     @Test
     public void checkOffsetAndLimitWithMinimum() {
         log.info("Проверка совместной работы offset и limit с минимальными значениями");
-        todoAppList = new ArrayList<>(given()
+        todoAppList = Arrays.asList(given()
                 .spec(reqSpecMethodGetWithOffsetAndLimit(MINIMUM_ID, MINIMUM_ID))
                 .when()
                 .get()
                 .then()
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
-                .extract().as(List.class));
+                .extract().body().as(TodoApp[].class));
 
         assertTrue(todoAppList.isEmpty(),
                 "Возвращаемый список элементов не соответствует offset и limit с максимальными значениями, переданными в запросе");
