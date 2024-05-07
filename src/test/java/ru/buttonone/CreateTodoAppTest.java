@@ -14,7 +14,7 @@ import static ru.buttonone.constants.CodConstant.SUCCESSFUL_CREATION;
 import static ru.buttonone.specifications.Specification.reqSpecMethodPost;
 
 @Slf4j
-public class CreateTodoAppTest extends BaseTodoAppTest {
+public class CreateTodoAppTest  {
     private final TodoAppDto todoAppDto = new TodoAppDtoImpl();
 
     /**

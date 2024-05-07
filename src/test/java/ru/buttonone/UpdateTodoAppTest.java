@@ -15,12 +15,11 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.buttonone.constants.ApiConstant.ID;
 import static ru.buttonone.constants.CodConstant.*;
-import static ru.buttonone.constants.CommonConstant.PASSWORD;
-import static ru.buttonone.constants.CommonConstant.USERNAME;
+import static ru.buttonone.constants.CommonConstant.*;
 import static ru.buttonone.specifications.Specification.reqSpecMethodPut;
 
 @Slf4j
-public class UpdateTodoAppTest {
+public class UpdateTodoAppTest  {
     public static final String ID_EXPECTED = "18";
     public static final String TEXT_EXPECTED = "Изменён";
     public static final boolean COMPLETED_EXPECTED = true;
@@ -100,7 +99,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
-
         log.info("Проверка передачи body без ID выполнена");
     }
 
@@ -118,7 +116,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
-
         log.info("Проверка передачи body без Text выполнена");
     }
 
@@ -136,7 +133,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
-
         log.info("Проверка передачи body без Completed выполнена");
     }
 
@@ -153,7 +149,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
-
         log.info("Проверка передачи запроса без body выполнена");
     }
 
@@ -170,7 +165,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(ACCESS_DENIED);
-
         log.info("Проверка выполнения запроса без авторизации выполнена");
     }
 
@@ -188,7 +182,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
-
         log.info("Проверка выполнения запроса с пустым body выполнена");
     }
 
@@ -205,7 +198,6 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(NOT_FOUND);
-
         log.info("Проверка выполнения запроса к несуществующей сущности выполнена");
     }
 
@@ -213,8 +205,8 @@ public class UpdateTodoAppTest {
     @Test
     public void checkUpdateDuplicateId() {
         log.info("Проверка дублирования ID");
-        TodoApp elementBefore1 = elementService.findElementById("2");
-        BigInteger elementBefore2 = elementService.findElementById("4").getId();
+        TodoApp elementBefore1 = elementService.findElementById("5");
+        BigInteger elementBefore2 = elementService.findElementById("6").getId();
 
         given()
                 .spec(reqSpecMethodPut(elementBefore1.getId()))
@@ -224,7 +216,40 @@ public class UpdateTodoAppTest {
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
-
         log.info("Проверка дублирования ID выполнена");
+    }
+
+    @DisplayName("Проверка замены ID на отрицательный идентификатор")
+    @Test
+    public void checkUpdateNegativeId() {
+        log.info("Проверка замены ID на отрицательный идентификатор");
+        TodoApp elementBefore = elementService.findElementById("3");
+
+        given()
+                .spec(reqSpecMethodPut(elementBefore.getId()))
+                .auth().preemptive().basic(USERNAME, PASSWORD)
+                .when()
+                .body(todoAppDto.todoAppToDto(NEGATIVE_DATA, TEXT_EXPECTED, COMPLETED_EXPECTED))
+                .put(ID)
+                .then()
+                .statusCode(INCORRECT_INPUT);
+        log.info("Проверка замены ID на отрицательный идентификатор выполнена");
+    }
+
+    @DisplayName("Проверка замены ID на идентификатор, превышающий максимум")
+    @Test
+    public void checkUpdateIdMoreThanMaximum() {
+        log.info("Проверка замены ID на идентификатор, превышающий максимум");
+        TodoApp elementBefore = elementService.findElementById("3");
+
+        given()
+                .spec(reqSpecMethodPut(elementBefore.getId()))
+                .auth().preemptive().basic(USERNAME, PASSWORD)
+                .when()
+                .body(todoAppDto.todoAppToDto(MORE_MAXIMUM_DATA, TEXT_EXPECTED, COMPLETED_EXPECTED))
+                .put(ID)
+                .then()
+                .statusCode(INCORRECT_INPUT);
+        log.info("Проверка замены ID на идентификатор, превышающий максимум выполнена");
     }
 }

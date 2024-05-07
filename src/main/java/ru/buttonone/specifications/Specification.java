@@ -66,7 +66,17 @@ public class Specification {
         return new RequestSpecBuilder()
                 .setBaseUri(BASE_URL)
                 .log(LogDetail.METHOD)
+                .log(LogDetail.BODY)
                 .setContentType(ContentType.JSON)
+                .addPathParams("id", id)
+                .addFilter(new AllureRestAssured())
+                .build();
+    }
+
+    public static RequestSpecification reqSpecMethodDelete(BigInteger id) {
+        return new RequestSpecBuilder()
+                .setBaseUri(BASE_URL)
+                .log(LogDetail.METHOD)
                 .addPathParams("id", id)
                 .addFilter(new AllureRestAssured())
                 .build();

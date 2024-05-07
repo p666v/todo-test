@@ -29,7 +29,11 @@ public class UploadingTestDataServiceImpl implements UploadingTestDataService {
                 new TodoApp(new BigInteger("8"), "Я объект №8", true),
                 new TodoApp(new BigInteger("9"), "Я объект №9", false),
                 new TodoApp(new BigInteger("10"), "Я объект №10", true),
-                new TodoApp(new BigInteger("11"), "Я объект №11", false));
+                new TodoApp(new BigInteger("11"), "Я объект №11", false),
+                new TodoApp(new BigInteger("20"), "Я объект №20", true),
+                new TodoApp(new BigInteger("21"), "Я объект №21", false),
+                new TodoApp(new BigInteger("22"), "Я объект №22", true),
+                new TodoApp(new BigInteger("23"), "Я объект №23", false));
 
         for (TodoApp data : dataList) {
             String id = String.valueOf(data.getId());
