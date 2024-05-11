@@ -19,7 +19,7 @@ import static ru.buttonone.constants.CommonConstant.*;
 import static ru.buttonone.specifications.Specification.reqSpecMethodPut;
 
 @Slf4j
-public class UpdateTodoAppTest  {
+public class UpdateTodoAppTest {
     public static final String ID_EXPECTED = "18";
     public static final String TEXT_EXPECTED = "Изменён";
     public static final boolean COMPLETED_EXPECTED = true;

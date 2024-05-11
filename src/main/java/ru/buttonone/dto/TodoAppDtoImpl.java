@@ -68,6 +68,4 @@ public class TodoAppDtoImpl implements TodoAppDto {
         }
         return todoInstanceJson;
     }
-
-
 }

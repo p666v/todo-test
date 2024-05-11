@@ -81,5 +81,4 @@ public class Specification {
                 .addFilter(new AllureRestAssured())
                 .build();
     }
-
 }
