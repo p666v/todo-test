@@ -3,7 +3,6 @@ package ru.buttonone;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.buttonone.services.ElementService;
 import ru.buttonone.services.ElementServiceImpl;
 
 import java.math.BigInteger;
@@ -11,14 +10,13 @@ import java.math.BigInteger;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.buttonone.constants.ApiConstant.ID;
-import static ru.buttonone.constants.CodConstant.*;
+import static ru.buttonone.constants.CodeConstant.*;
 import static ru.buttonone.constants.CommonConstant.*;
 import static ru.buttonone.specifications.Specification.reqSpecMethodDelete;
 
 @Slf4j
-public class DeleteTodoAppTest {
+public class DeleteTodoAppTest extends BaseTest {
     public static final String TEST_ID = "21";
-    private final ElementService elementService = new ElementServiceImpl();
 
     /**
      * Позитивный сценарий Delete
@@ -29,7 +27,7 @@ public class DeleteTodoAppTest {
     public void checkDeleteElement() {
         log.info("Проверка удаления элемента");
         given()
-                .spec(reqSpecMethodDelete(elementService.findElementById(TEST_ID).getId()))
+                .spec(reqSpecMethodDelete(new ElementServiceImpl().findElementById(TEST_ID).getId()))
                 .auth().preemptive().basic(USERNAME, PASSWORD)
                 .when()
                 .delete(ID)
@@ -37,8 +35,8 @@ public class DeleteTodoAppTest {
                 .statusCode(SUCCESSFUL_DELETION);
 
         assertThrows(RuntimeException.class, () -> {
-            elementService.findElementById(TEST_ID).getId();
-        }, "");
+            new ElementServiceImpl().findElementById(TEST_ID).getId();
+        }, "Элемент не удалён");
         log.info("Проверка удаления элемента выполнена");
     }
 
@@ -93,7 +91,7 @@ public class DeleteTodoAppTest {
     public void checkDeleteWithoutAuth() {
         log.info("Проверка удаления элемента без авторизации");
         given()
-                .spec(reqSpecMethodDelete(elementService.findElementById("22").getId()))
+                .spec(reqSpecMethodDelete(new ElementServiceImpl().findElementById("22").getId()))
                 .when()
                 .delete(ID)
                 .then()

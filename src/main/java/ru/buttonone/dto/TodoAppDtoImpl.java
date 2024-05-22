@@ -14,37 +14,46 @@ import java.math.BigInteger;
 public class TodoAppDtoImpl implements TodoAppDto {
 
     @Override
-    public String todoAppToDto(String idExpected, String textExpected, boolean completedExpected) {
+    public String todoAppToDto(String id, String text, boolean completed) {
         FilterProvider filters = new SimpleFilterProvider()
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "text", "completed"));
-        TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
+        TodoApp todoApp = new TodoApp(new BigInteger(id), text, completed);
 
         return convertObjectToJason(filters, todoApp);
     }
 
     @Override
-    public String todoAppToDtoWithoutCompleted(String idExpected, String textExpected, boolean completedExpected) {
+    public String todoAppToDtoWithoutCompleted(String id, String text) {
         FilterProvider filters = new SimpleFilterProvider()
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "text"));
-        TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
+        TodoApp todoApp = TodoApp.builder()
+                .id(new BigInteger(id))
+                .text(text)
+                .build();
 
         return convertObjectToJason(filters, todoApp);
     }
 
     @Override
-    public String todoAppToDtoWithoutText(String idExpected, String textExpected, boolean completedExpected) {
+    public String todoAppToDtoWithoutText(String id, boolean completed) {
         FilterProvider filters = new SimpleFilterProvider()
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "completed"));
-        TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
+        TodoApp todoApp = TodoApp.builder()
+                .id(new BigInteger(id))
+                .completed(completed)
+                .build();
 
         return convertObjectToJason(filters, todoApp);
     }
 
     @Override
-    public String todoAppToDtoWithoutId(String idExpected, String textExpected, boolean completedExpected) {
+    public String todoAppToDtoWithoutId(String text, boolean completed) {
         FilterProvider filters = new SimpleFilterProvider()
                 .addFilter("myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("text", "completed"));
-        TodoApp todoApp = new TodoApp(new BigInteger(idExpected), textExpected, completedExpected);
+        TodoApp todoApp = TodoApp.builder()
+                .text(text)
+                .completed(completed)
+                .build();
 
         return convertObjectToJason(filters, todoApp);
     }
@@ -63,7 +72,7 @@ public class TodoAppDtoImpl implements TodoAppDto {
         try {
             todoInstanceJson = new ObjectMapper().writer(filters).writeValueAsString(todoApp);
         } catch (JsonProcessingException e) {
-            log.error("Ошибка при мапинге объекта в JASON: {}", e.getMessage());
+            log.error("Ошибка при маппинге объекта в JASON: {}", e.getMessage());
             throw new RuntimeException(e);
         }
         return todoInstanceJson;

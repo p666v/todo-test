@@ -2,13 +2,13 @@ package ru.buttonone.dto;
 
 public interface TodoAppDto {
 
-    String todoAppToDto(String idExpected, String textExpected, boolean completedExpected);
+    String todoAppToDto(String id, String text, boolean completed);
 
-    String todoAppToDtoWithoutCompleted(String idExpected, String textExpected, boolean completedExpected);
+    String todoAppToDtoWithoutCompleted(String id, String text);
 
-    String todoAppToDtoWithoutText(String idExpected, String textExpected, boolean completedExpected);
+    String todoAppToDtoWithoutText(String id, boolean completed);
 
-    String todoAppToDtoWithoutId(String idExpected, String textExpected, boolean completedExpected);
+    String todoAppToDtoWithoutId(String text, boolean completed);
 
     String todoAppToDtoEmpty();
 }

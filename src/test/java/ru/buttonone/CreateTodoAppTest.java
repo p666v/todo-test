@@ -5,18 +5,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.buttonone.dto.TodoAppDto;
 import ru.buttonone.dto.TodoAppDtoImpl;
 
 import static io.restassured.RestAssured.given;
-import static ru.buttonone.constants.CodConstant.INCORRECT_INPUT;
-import static ru.buttonone.constants.CodConstant.SUCCESSFUL_CREATION;
+import static ru.buttonone.constants.CodeConstant.INCORRECT_INPUT;
+import static ru.buttonone.constants.CodeConstant.SUCCESSFUL_CREATION;
 import static ru.buttonone.specifications.Specification.reqSpecMethodPost;
 
 @Slf4j
-public class CreateTodoAppTest {
-    private final TodoAppDto todoAppDto = new TodoAppDtoImpl();
-
+public class CreateTodoAppTest extends BaseTest {
     /**
      * Позитивный сценарий Create
      */
@@ -29,7 +26,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
@@ -44,7 +41,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
@@ -59,7 +56,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
@@ -74,7 +71,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(SUCCESSFUL_CREATION);
@@ -93,7 +90,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -108,7 +105,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -123,7 +120,7 @@ public class CreateTodoAppTest {
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDto(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDto(idExpected, textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -133,12 +130,12 @@ public class CreateTodoAppTest {
     @DisplayName("Проверка добавления элемента без ID")
     @ParameterizedTest
     @MethodSource("ru.buttonone.TodoAppTestData#checkAddElementWithoutIdData")
-    public void checkAddElementWithoutId(String idExpected, String textExpected, boolean completedExpected) {
+    public void checkAddElementWithoutId(String textExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента без ID: {}, {}", textExpected, completedExpected);
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutId(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDtoWithoutId(textExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -148,12 +145,12 @@ public class CreateTodoAppTest {
     @DisplayName("Проверка добавления элемента без Text")
     @ParameterizedTest
     @MethodSource("ru.buttonone.TodoAppTestData#checkAddElementWithoutTextData")
-    public void checkAddElementWithoutText(String idExpected, String textExpected, boolean completedExpected) {
+    public void checkAddElementWithoutText(String idExpected, boolean completedExpected) {
         log.info("Проверка добавления элемента без Text: {}, {}", idExpected, completedExpected);
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutText(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDtoWithoutText(idExpected, completedExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -163,12 +160,12 @@ public class CreateTodoAppTest {
     @DisplayName("Проверка добавления элемента без Completed")
     @ParameterizedTest
     @MethodSource("ru.buttonone.TodoAppTestData#checkAddElementWithoutCompletedData")
-    public void checkAddElementWithoutCompleted(String idExpected, String textExpected, boolean completedExpected) {
+    public void checkAddElementWithoutCompleted(String idExpected, String textExpected) {
         log.info("Проверка добавления элемента без Completed: {}, {}", idExpected, textExpected);
         given()
                 .spec(reqSpecMethodPost())
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutCompleted(idExpected, textExpected, completedExpected))
+                .body(new TodoAppDtoImpl().todoAppToDtoWithoutCompleted(idExpected, textExpected))
                 .post()
                 .then()
                 .statusCode(INCORRECT_INPUT);

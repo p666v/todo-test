@@ -1,6 +1,6 @@
 package ru.buttonone.constants;
 
-public final class CodConstant {
+public final class CodeConstant {
     public static final int SUCCESSFUL_REQUEST = 200;
     public static final int SUCCESSFUL_CREATION = 201;
     public static final int SUCCESSFUL_DELETION = 204;

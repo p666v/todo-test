@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.buttonone.models.TodoApp;
-import ru.buttonone.services.ElementService;
 import ru.buttonone.services.ElementServiceImpl;
 
 import java.util.Arrays;
@@ -15,14 +14,13 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.buttonone.constants.ApiConstant.LIMIT;
 import static ru.buttonone.constants.ApiConstant.OFFSET;
-import static ru.buttonone.constants.CodConstant.INCORRECT_INPUT;
-import static ru.buttonone.constants.CodConstant.SUCCESSFUL_REQUEST;
+import static ru.buttonone.constants.CodeConstant.INCORRECT_INPUT;
+import static ru.buttonone.constants.CodeConstant.SUCCESSFUL_REQUEST;
 import static ru.buttonone.constants.CommonConstant.*;
 import static ru.buttonone.specifications.Specification.*;
 
 @Slf4j
-public class ReadTodoAppTest {
-    private final ElementService elementService = new ElementServiceImpl();
+public class ReadTodoAppTest extends BaseTest {
     private List<TodoApp> todoAppList;
 
     /**
@@ -89,7 +87,7 @@ public class ReadTodoAppTest {
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
                 .extract().body().as(TodoApp[].class));
 
-        assertEquals(elementService.getElementsList().size(), todoAppList.size(),
+        assertEquals(new ElementServiceImpl().getElementsList().size(), todoAppList.size(),
                 "Возвращаемый список элементов не соответствует limit = max, переданному в запросе");
         log.info("Проверка limit = max выполнена");
     }
@@ -106,7 +104,7 @@ public class ReadTodoAppTest {
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
                 .extract().body().as(TodoApp[].class));
 
-        assertEquals(elementService.getElementsList().get(2), todoAppList.get(0),
+        assertEquals(new ElementServiceImpl().getElementsList().get(2), todoAppList.get(0),
                 "Возвращаемый список элементов не соответствует offset, переданному в запросе");
         log.info("Проверка offset выполнена");
     }
@@ -123,7 +121,7 @@ public class ReadTodoAppTest {
                 .spec(resSpecMethodGetWithStatus(SUCCESSFUL_REQUEST))
                 .extract().body().as(TodoApp[].class));
 
-        assertEquals(elementService.getElementsList().size(), todoAppList.size(),
+        assertEquals(new ElementServiceImpl().getElementsList().size(), todoAppList.size(),
                 "Возвращаемый список элементов не соответствует offset = 0, переданному в запросе");
         log.info("Проверка offset = 0 выполнена");
     }
@@ -160,7 +158,7 @@ public class ReadTodoAppTest {
         assertAll(
                 () -> assertEquals(1, todoAppList.size(),
                         "Возвращаемый список элементов не соответствует limit, переданному в запросе"),
-                () -> assertEquals(elementService.getElementsList().get(1), todoAppList.get(0),
+                () -> assertEquals(new ElementServiceImpl().getElementsList().get(1), todoAppList.get(0),
                         "Возвращаемый список элементов не соответствует offset, переданному в запросе"));
         log.info("Проверка совместной работы offset и limit выполнена");
     }

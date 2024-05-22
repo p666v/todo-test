@@ -9,4 +9,8 @@ public interface ElementService {
     List<TodoApp> getElementsList();
 
     TodoApp findElementById(String id);
+
+    void uploadData();
+
+    void removeData();
 }

@@ -14,12 +14,12 @@ import java.math.BigInteger;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.buttonone.constants.ApiConstant.ID;
-import static ru.buttonone.constants.CodConstant.*;
+import static ru.buttonone.constants.CodeConstant.*;
 import static ru.buttonone.constants.CommonConstant.*;
 import static ru.buttonone.specifications.Specification.reqSpecMethodPut;
 
 @Slf4j
-public class UpdateTodoAppTest {
+public class UpdateTodoAppTest extends BaseTest {
     public static final String ID_EXPECTED = "18";
     public static final String TEXT_EXPECTED = "Изменён";
     public static final boolean COMPLETED_EXPECTED = true;
@@ -27,7 +27,7 @@ public class UpdateTodoAppTest {
     private final ElementService elementService = new ElementServiceImpl();
 
     /**
-     * Позитивный сценарий Read
+     * Позитивный сценарий Update
      */
 
     @DisplayName("Проверка внесение изменений в Text и Completed")
@@ -82,7 +82,7 @@ public class UpdateTodoAppTest {
     }
 
     /**
-     * Негативный сценарий Read
+     * Негативный сценарий Update
      */
 
     @DisplayName("Проверка передачи body без ID")
@@ -95,7 +95,7 @@ public class UpdateTodoAppTest {
                 .spec(reqSpecMethodPut(elementBefore.getId()))
                 .auth().preemptive().basic(USERNAME, PASSWORD)
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutId(ID_EXPECTED, TEXT_EXPECTED, COMPLETED_EXPECTED))
+                .body(todoAppDto.todoAppToDtoWithoutId(TEXT_EXPECTED, COMPLETED_EXPECTED))
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -112,7 +112,7 @@ public class UpdateTodoAppTest {
                 .spec(reqSpecMethodPut(elementBefore.getId()))
                 .auth().preemptive().basic(USERNAME, PASSWORD)
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutText(ID_EXPECTED, TEXT_EXPECTED, COMPLETED_EXPECTED))
+                .body(todoAppDto.todoAppToDtoWithoutText(ID_EXPECTED, COMPLETED_EXPECTED))
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -129,7 +129,7 @@ public class UpdateTodoAppTest {
                 .spec(reqSpecMethodPut(elementBefore.getId()))
                 .auth().preemptive().basic(USERNAME, PASSWORD)
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutCompleted(ID_EXPECTED, TEXT_EXPECTED, COMPLETED_EXPECTED))
+                .body(todoAppDto.todoAppToDtoWithoutCompleted(ID_EXPECTED, TEXT_EXPECTED))
                 .put(ID)
                 .then()
                 .statusCode(INCORRECT_INPUT);
@@ -161,7 +161,7 @@ public class UpdateTodoAppTest {
         given()
                 .spec(reqSpecMethodPut(elementBefore.getId()))
                 .when()
-                .body(todoAppDto.todoAppToDtoWithoutCompleted("10", TEXT_EXPECTED, COMPLETED_EXPECTED))
+                .body(todoAppDto.todoAppToDtoWithoutCompleted("10", TEXT_EXPECTED))
                 .put(ID)
                 .then()
                 .statusCode(ACCESS_DENIED);
@@ -201,7 +201,7 @@ public class UpdateTodoAppTest {
         log.info("Проверка выполнения запроса к несуществующей сущности выполнена");
     }
 
-    @DisplayName("Проверка дублирования ID")  //todo Баг в приложении
+    @DisplayName("Проверка дублирования ID")  //todo Баг в приложении. Описание в README
     @Test
     public void checkUpdateDuplicateId() {
         log.info("Проверка дублирования ID");
